@@ -12,18 +12,24 @@
     <div id="game">
         <div class="status">
             <p>
-                Правильно введённых слов: <span class="status__wins">0</span>
+                Количество введённых фраз: <span class="status__wins">0</span>
             </p>
             <p>
-                Неправильно введённых слов: <span class="status__loss">0</span>
+                Количество ошибок: <span class="status__loss">0</span>
+            </p>
+            <p>
+                Таймер обратного отсчёта (сек.): <span class="countdown__timer">0</span>
             </p>
         </div>
         <div class="word">
-            <span class="symbol">К</span>
-            <span class="symbol">о</span>
-            <span class="symbol">л</span>
-            <span class="symbol">я</span>
+            <h2>Правила:</h2>
+            <p>На экране появляется фраза.<p>
+            <p>Если игрок вводит не верный символ или заканчивается таймер обратного отсчёта, ему засчитываeтся ошибка. После 3 ошибок игрок проигрывает. После 10 введённых фраз игрок побеждает.</p>
+            <p>Игра обрабатывает нажатие клавиш с буквами русского/английского алфавита и пробел.</p>
+            <p>Нажмите кнопку "Начать игру".</p>
         </div>
+        <button class="start__button" id="start">Начать игру</button>
+        <button class="exit__button" id="exit">Выйти</button>
     </div>
     <script src="task.js"></script>
 </body>

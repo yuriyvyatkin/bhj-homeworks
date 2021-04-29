@@ -11,3 +11,12 @@
   color: #fff;
 }
 
+.start__button {
+  margin-top: 50px;
+}
+
+.exit__button {
+  display: none;
+
+  margin-top: 50px;
+}
