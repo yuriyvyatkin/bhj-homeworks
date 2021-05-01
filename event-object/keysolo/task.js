@@ -1,18 +1,17 @@
 class Game {
   constructor() {
-    this.statusWins = document.querySelector('.status__wins');
-    this.statusLoss = document.querySelector('.status__loss');
-    this.countdownTimer = document.querySelector('.countdown__timer');
+    this.wins = document.querySelector('.status__wins');
+    this.losses = document.querySelector('.status__loss');
+    this.timer = document.querySelector('.countdown__timer');
     this.word = document.querySelector('.word');
     this.rules = this.word.innerHTML;
-    this.stopped = false;
   }
 
   startGame() {
     this.render();
-    this.startCountdownTimer();
+    this.startTimer();
 
-    document.addEventListener('keyup', (event) => {
+    this.handleKeyUp = (event) => {
       const currentSymbol = this.word.querySelector('.current__symbol');
 
       if (currentSymbol.parentElement.classList.contains('word_incorrect')) {
@@ -26,13 +25,15 @@ class Game {
           this.fail(currentSymbol);
         }
       }
-    })
+    }
+
+    document.addEventListener('keyup', this.handleKeyUp);
   }
 
   render() {
-    this.statusWins.textContent = 0;
-    this.statusLoss.textContent = 0;
-    this.countdownTimer.textContent = 0;
+    this.wins.textContent = 0;
+    this.losses.textContent = 0;
+    this.timer.textContent = 0;
     this.setWord();
   }
 
@@ -56,33 +57,40 @@ class Game {
     this.word.innerHTML = html;
   }
 
-  startCountdownTimer() {
-    this.countdownTimer.textContent = this.word.childElementCount;
+  startTimer() {
+    this.timer.textContent = this.word.childElementCount;
 
-    const id = setInterval(() => {
-      if (this.stopped) {
-        clearInterval(id);
-        this.stopped = false;
-      }
-
-      if (--this.countdownTimer.textContent === 0) {
-        clearInterval(id);
+    const timer = () => {
+      if (--this.timer.textContent < 1) {
+        clearInterval(this.timerId);
         this.fail(this.word.querySelector('.current__symbol'));
       }
-    }, 1000);
+    }
+
+    if (this.timerId) {
+      clearInterval(this.timerId);
+    }
+
+    this.timerId = setInterval(timer, 1000);
   }
 
   success(currentSymbol) {
     currentSymbol.classList.remove('current__symbol');
     currentSymbol.classList.add('symbol_correct');
-    
+
     if (currentSymbol.nextElementSibling === null) {
-      if (++this.statusWins.textContent === 10) {
-        alert('Вы победили :)')
-        this.render();
+      if (++this.wins.textContent > 9) {
+        clearInterval(this.timerId);
+        setTimeout(() => {
+          alert('Вы победили :)');
+        }, 100);
+        setTimeout(() => {
+          this.render();
+          this.startTimer();
+        }, 100);
       } else {
         this.setWord();
-        this.startCountdownTimer();
+        this.startTimer();
       }
     } else {
       currentSymbol.nextElementSibling.classList.add('current__symbol');
@@ -92,42 +100,49 @@ class Game {
   fail(currentSymbol) {
     currentSymbol.parentElement.classList.add('word_incorrect');
 
-    if (++this.statusLoss.textContent === 3) {
-      alert('Вы проиграли :(')
-      currentSymbol.parentElement.classList.remove('word_incorrect');
-      this.render();
+    if (++this.losses.textContent > 2) {
+      clearInterval(this.timerId);
+      setTimeout(() => {
+        alert('Вы проиграли :(');
+      }, 100);
+      setTimeout(() => {
+        currentSymbol.parentElement.classList.remove('word_incorrect');
+        this.render();
+        this.startTimer();
+      }, 100);
     } else {
+      clearInterval(this.timerId);
       setTimeout(() => {
         currentSymbol.parentElement.classList.remove('word_incorrect');
         this.setWord();
-        this.startCountdownTimer();
+        this.startTimer();
       }, 1000);
     }
   }
 
   stopGame() {
-    this.stopped = true;
+    document.removeEventListener('keyup', this.handleKeyUp);
+    clearInterval(this.timerId);
+    this.wins.textContent = 0;
+    this.losses.textContent = 0;
+    this.timer.textContent = 0;
     this.word.innerHTML = this.rules;
-    this.statusWins.textContent = 0;
-    this.statusLoss.textContent = 0;
-    setTimeout(() => {
-      this.countdownTimer.textContent = 0;
-    }, 1000);
   }
 }
 
-const startButton = document.getElementById('start');
-const exitButton = document.getElementById('exit');
 let game = new Game();
+
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
 
 startButton.onclick = () => {
   game.startGame();
   startButton.style.display = 'none';
-  exitButton.style.display = 'block';
+  stopButton.style.display = 'block';
 }
 
-exitButton.onclick = () => {
+stopButton.onclick = () => {
   game.stopGame();
   startButton.style.display = 'block';
-  exitButton.style.display = 'none';
+  stopButton.style.display = 'none';
 }

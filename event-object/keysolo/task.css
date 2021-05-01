@@ -11,12 +11,20 @@
   color: #fff;
 }
 
-.start__button {
-  margin-top: 50px;
+p {
+  font-size: 24px;
 }
 
-.exit__button {
-  display: none;
+.start__button {
+  margin-top: 110px;
+  background-color: cornflowerblue;
+  color: whitesmoke;
+  font-size: 30px;
+}
 
+.stop__button {
   margin-top: 50px;
+  display: none;
+  background-color: coral;
+  font-size: 30px;
 }
