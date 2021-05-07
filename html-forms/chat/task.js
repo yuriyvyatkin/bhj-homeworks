@@ -61,7 +61,7 @@ function handleEnter(event) {
   }
 }
 
-const timerId = setTimeout(sendQuestion, 30000);
+let timerId = setTimeout(sendQuestion, 30000);
 
 chatLabel.onclick = () => {
   chatWidget.classList.add('chat-widget_active');
