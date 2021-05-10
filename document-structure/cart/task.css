@@ -1,6 +1,11 @@
 body {
   font-family: Arial;
 }
+
+.cart {
+  display: none;
+}
+
 .cart__products {
   display: flex;
   justify-content: center;
@@ -39,6 +44,10 @@ body {
 .product__image {
   width: 100px;
   object-fit: contain;
+}
+
+.product__image-copy {
+  position: fixed;
 }
 
 .product__quantity-title {
@@ -88,4 +97,11 @@ body {
 
 .product-shadow {
   position: absolute;
+}
+
+.product__remove {
+  color: red;
+  font-size: 30px;
+  text-decoration: none;
+  cursor: pointer;
 }
