@@ -2,9 +2,32 @@ const taskInput = document.getElementById('task__input');
 const tasksAdd = document.getElementById('tasks__add');
 const tasksList = document.getElementById('tasks__list');
 
-tasksList.innerHTML = localStorage.getItem('todos');
+let todos = localStorage.getItem('todos');
+
+if (todos) {
+  let html = '';
+
+  todos = todos.split('\n');
+  todos.pop();
+  todos.forEach(todo => {
+    html += `
+      <div class="task">
+        <div class="task__title">
+          ${todo}
+        </div>
+        <a href="#" class="task__remove">&times;</a>
+      </div>
+    `
+  });
+
+  tasksList.innerHTML = html;
+}
 
 taskInput.focus();
+
+function getTodos() {
+  return tasksList.innerText.replace(/\n×\n/g, '\n');
+}
 
 function handleInput() {
   if (taskInput.value === '') {
@@ -23,7 +46,7 @@ function handleInput() {
   `
   );
 
-  localStorage.setItem('todos', tasksList.innerHTML);
+  localStorage.setItem('todos', getTodos());
 
   taskInput.value = '';
   taskInput.focus();
@@ -48,7 +71,7 @@ tasksList.addEventListener('click', (event) => {
     target.closest('.task').remove();
 
     if (tasksList.children.length) {
-      localStorage.setItem('todos', tasksList.innerHTML);
+      localStorage.setItem('todos', getTodos());
     } else {
       localStorage.removeItem('todos');
     }
