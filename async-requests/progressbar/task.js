@@ -12,20 +12,18 @@ sendButton.onclick = (event) => {
   xhr.open('POST', 'https://netology-slow-rest.herokuapp.com/upload.php');
 
   xhr.upload.onprogress = (event) => {
-    progressBar.value = event.loaded / event.total;
+    progressBar.value += event.loaded / event.total;
   }
 
-  xhr.upload.onloadend = (event) => {
-    setTimeout(() => {
-      if (event.loaded === event.total) {
-        alert('Данные успешно отправлены.');
-      } else {
-        console.log(`Error ${xhr.status}: ${xhr.statusText}`);
-      }
-      document.forms.form.reset();
-      progressBar.value = 0;
-      sendButton.disabled = false;
-    }, 1000);
+  xhr.upload.onload = (event) => {
+    if (event.loaded === event.total) {
+      alert('Данные успешно отправлены.');
+    } else {
+      console.log(`Error ${xhr.status}: ${xhr.statusText}`);
+    }
+    document.forms.form.reset();
+    progressBar.value = 0;
+    sendButton.disabled = false;
   }
 
   xhr.send(inputFile.files[0]);
